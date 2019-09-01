@@ -18,7 +18,7 @@ const Stock = mongoose.model("Stock", StockSchema);
 module.exports = (app) => {
   app.route('/api/stock-prices')
     .get((req, res) => {    
-      if(!req.query.stock) return res.send("there wasn't send any stock");
+      if(!req.query.stock) return res.send("there wasn't any stock");
       const stocks = req.query.stock;
       const like = req.query.like? req.query.like === "true": "false";
       const ip = req.header('x-forwarded-for')
@@ -28,7 +28,7 @@ module.exports = (app) => {
       if (!stocks) 
         return res.send("no stock specified");
       if (Array.isArray(stocks)) { //two stocks
-        if (stocks < 2) return res.send("the comparison must be between only TWO stocks");
+        if (stocks < 2) return res.send("Can compare only 2 stocks");
         
         let stock1Promise = axios.get("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + stocks[0] + "&apikey=" + process.env.ALPHA_VANTAGE_KEY);
         let stock2Promise = axios.get("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + stocks[1] + "&apikey=" + process.env.ALPHA_VANTAGE_KEY);
